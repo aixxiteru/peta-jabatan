@@ -64,7 +64,9 @@ function App() {
       }
     };
 
-    autoSync(savedUrl, savedGid);
+    // Disabled automatic sync on app load. Synchronization now only happens
+    // when the user clicks "Sinkronkan Sekarang" in the Peta Jabatan page.
+    // autoSync(savedUrl, savedGid);
   }, []);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
