@@ -1,11 +1,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { History, Search, Filter } from 'lucide-react';
-import { employeeHistory as fallbackData } from '../mockData';
 
-const DEFAULT_HISTORI_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1wbPHBjtFPSOIDxIc593qZbeaDLKtWYzViW-CbZQmAtY/export?format=csv&gid=136694399';
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1GfE_sn4ATSf0r0t6dn1WymuScWF-HzIxLYdmnGJx8FA/export?format=csv&gid=894669172';
 
-type HistoriRow = {
+type HistoryRow = {
   id: number;
   nama?: string;
   nip?: string;
@@ -54,45 +53,34 @@ function parseCSV(text: string) {
     headers.forEach((h, i) => { obj[h] = cols[i] ?? ''; });
     return obj;
   });
-  return rows;
+  return { headers, rows };
 }
 
-function mapRow(obj: Record<string,string>, idx: number): HistoriRow {
-  const keyOf = (name: string) => {
-    const lower = Object.keys(obj).find(k => k.toLowerCase() === name.toLowerCase());
-    if (lower) return obj[lower];
-    const found = Object.keys(obj).find(k => k.toLowerCase().includes(name.toLowerCase()));
-    return found ? obj[found] : '';
-  };
-
-  return {
-    id: idx + 1,
-    nama: keyOf('Nama Pegawai') || keyOf('nama'),
-    nip: keyOf('NIP') || keyOf('nip'),
-    jabatan: keyOf('Jabatan') || keyOf('jabatan'),
-    unitKerja: keyOf('Unit Kerja') || keyOf('unit'),
-    status: keyOf('Status') || keyOf('status'),
-    b: keyOf('B') || keyOf('b'),
-    tanggal: keyOf('Tanggal') || keyOf('tanggal'),
-    keterangan: keyOf('Keterangan') || keyOf('keterang'),
-  };
+function headerToKey(header: string) {
+  const h = header.toLowerCase();
+  if (h.includes('nama')) return 'nama';
+  if (h.includes('nip')) return 'nip';
+  if (h.includes('jabatan')) return 'jabatan';
+  if (h.includes('unit')) return 'unitKerja';
+  if (h.includes('status')) return 'status';
+  if (h.includes('tanggal') || h.includes('date')) return 'tanggal';
+  if (h.includes('keterangan')) return 'keterangan';
+  return header.replace(/\s+/g, '_');
 }
 
 export const EmployeeStatusHistory: React.FC = () => {
-  const [rows, setRows] = useState<HistoriRow[]>([]);
+  const [rows, setRows] = useState<HistoryRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [useFallback, setUseFallback] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     let mounted = true;
     async function load() {
       setLoading(true);
       setError(null);
-      setUseFallback(false);
       try {
-        const url = localStorage.getItem('histori_sheet_url') || DEFAULT_HISTORI_SHEET_URL;
-        const res = await fetch(url);
+        const res = await fetch(SHEET_CSV_URL);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const text = await res.text();
         const parsed = parseCSV(text);
@@ -100,17 +88,18 @@ export const EmployeeStatusHistory: React.FC = () => {
           if (mounted) setRows([]);
           return;
         }
-        const mapped = parsed.map((r: Record<string,string>, idx: number) => mapRow(r, idx));
+        const headers = parsed.headers;
+        const mapped = parsed.rows.map((r: Record<string,string>, idx: number) => {
+          const target: HistoryRow = { id: idx + 1 };
+          headers.forEach(h => {
+            const key = headerToKey(h);
+            target[key] = r[h];
+          });
+          return target;
+        });
         if (mounted) setRows(mapped);
       } catch (e: any) {
-        if (mounted) {
-          setError(e.message ?? 'Gagal memuat data');
-          setUseFallback(true);
-          setRows(fallbackData.map((item, idx) => ({
-            ...item,
-            id: idx + 1,
-          })));
-        }
+        if (mounted) setError(e.message ?? 'Gagal memuat data');
       } finally {
         if (mounted) setLoading(false);
       }
@@ -119,7 +108,9 @@ export const EmployeeStatusHistory: React.FC = () => {
     return () => { mounted = false; };
   }, []);
 
-  const displayRows = useFallback ? fallbackData : rows;
+  const filteredRows = rows.filter(item =>
+    !searchQuery || item.nama?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="p-6 space-y-6">
@@ -133,6 +124,8 @@ export const EmployeeStatusHistory: React.FC = () => {
                 <input 
                     type="text" 
                     placeholder="Cari Pegawai..." 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-8 pr-4 py-1.5 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-blue-500 outline-none w-48 md:w-64 bg-white text-gray-900 placeholder-gray-400 shadow-sm"
                 />
                 <Search size={14} className="absolute left-2.5 top-2 text-gray-400" />
@@ -154,13 +147,12 @@ export const EmployeeStatusHistory: React.FC = () => {
                 <th className="p-4 font-semibold">Jabatan</th>
                 <th className="p-4 font-semibold">Unit Kerja</th>
                 <th className="p-4 font-semibold text-center">Status</th>
-                <th className="p-4 font-semibold text-center">B</th>
                 <th className="p-4 font-semibold text-center">Tanggal</th>
                 <th className="p-4 font-semibold">Keterangan</th>
               </tr>
             </thead>
             <tbody className="text-xs text-gray-700">
-              {displayRows.map((item, index) => (
+              {filteredRows.map((item, index) => (
                 <tr key={item.id} className="even:bg-gray-50 hover:bg-blue-50 transition-colors border-b border-gray-100">
                   <td className="p-4 text-center border-r border-gray-200">{index + 1}</td>
                   <td className="p-4 font-medium border-r border-gray-200 whitespace-nowrap">{item.nama || '-'}</td>
@@ -178,7 +170,6 @@ export const EmployeeStatusHistory: React.FC = () => {
                       {item.status || '-'}
                     </span>
                   </td>
-                  <td className="p-4 text-center border-r border-gray-200 whitespace-nowrap">{item.b || '-'}</td>
                   <td className="p-4 text-center border-r border-gray-200 whitespace-nowrap">{item.tanggal || '-'}</td>
                   <td className="p-4">{item.keterangan || '-'}</td>
                 </tr>
@@ -192,10 +183,10 @@ export const EmployeeStatusHistory: React.FC = () => {
         )}
 
         {!loading && error && (
-          <div className="p-6 text-center text-yellow-600">⚠️ {error} (Menampilkan data fallback)</div>
+          <div className="p-6 text-center text-red-600">Error: {error}</div>
         )}
 
-        {!loading && !error && displayRows.length === 0 && (
+        {!loading && !error && filteredRows.length === 0 && (
           <div className="p-10 text-center text-gray-400 italic">Tidak ada data histori tersedia.</div>
         )}
       </div>
