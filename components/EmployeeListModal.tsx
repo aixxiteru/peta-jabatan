@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, User, Loader2, AlertCircle } from 'lucide-react';
 import { Employee } from '../types';
 
@@ -85,8 +86,8 @@ export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, 
 
   if (!jobTitle) return null;
 
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-fade-in border border-gray-300">
         {/* Header - Fixed Height */}
         <div className="bg-slate-800 px-6 py-4 flex items-center justify-between text-white shrink-0">
@@ -157,6 +158,7 @@ export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, 
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

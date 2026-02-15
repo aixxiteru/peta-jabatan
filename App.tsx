@@ -100,7 +100,7 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 font-sans text-gray-800">
+    <div className="flex h-screen bg-gray-100 font-sans text-gray-800 overflow-hidden">
       <Sidebar 
         currentView={currentView} 
         setView={(view) => {
@@ -116,11 +116,14 @@ function App() {
             <div className="fixed inset-0 bg-black/50 z-20 lg:hidden" onClick={() => setIsSidebarOpen(false)}></div>
          )}
         <Header title={getPageTitle()} breadcrumbs={getBreadcrumbs()} toggleSidebar={toggleSidebar} />
-        <main className="flex-1 overflow-y-auto">{renderContent()}</main>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden">{renderContent()}</main>
         <footer className="bg-white p-4 border-t text-xs text-gray-500 flex justify-between">
             <span>Copyright © 2026 Alam BSKJI. All rights reserved.</span>
         </footer>
       </div>
+      
+      {/* Portals rendered at app level - outside of main overflow constraint */}
+      <div id="modal-root"></div>
     </div>
   );
 }

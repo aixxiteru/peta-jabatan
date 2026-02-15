@@ -1,5 +1,6 @@
 
 import React, { useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { X, AlertTriangle, Landmark, Briefcase, BookOpen, Users } from 'lucide-react';
 
 interface ShortageDetailModalProps {
@@ -43,8 +44,8 @@ export const ShortageDetailModal: React.FC<ShortageDetailModalProps> = ({ catego
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-fade-in border border-gray-300">
         {/* Header */}
         <div className="bg-rose-600 px-6 py-4 flex items-center justify-between text-white shrink-0">
@@ -121,6 +122,7 @@ export const ShortageDetailModal: React.FC<ShortageDetailModalProps> = ({ catego
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
