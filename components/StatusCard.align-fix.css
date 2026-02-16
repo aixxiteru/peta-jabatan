@@ -1,0 +1,70 @@
+/* Style font untuk judul dan subjudul grafik agar seragam dan mirip contoh */
+.dashboard-chart-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #222;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.25rem;
+}
+.dashboard-chart-subtitle {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.dashboard-chart-period {
+  color: #2563eb;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+/* Style untuk container grafik agar seragam dengan card summary */
+.dashboard-chart-container {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 24px 24px 32px 24px;
+  border: none;
+}
+/* Grid untuk dashboard summary agar kotak memenuhi screen */
+.dashboard-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+@media (max-width: 1100px) {
+  .dashboard-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .dashboard-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* Patch for aligning KEKURANGAN and angkanya sejajar */
+.status-card__info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.status-card__shortage-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 2px 12px;
+  font-weight: 600;
+  font-size: 1em;
+  margin-left: 4px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border 0.15s;
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+}

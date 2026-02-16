@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import { LayoutDashboard, Map, History, ChevronLeft, Database, Archive } from 'lucide-react';
+import { LayoutDashboard, Map, History, ChevronLeft, Database, Archive, ExternalLink } from 'lucide-react';
 import { ViewState } from '../types';
 
 interface SidebarProps {
@@ -56,6 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen, 
             >
               <item.icon size={18} className="mr-3" />
               {item.label}
+              <ExternalLink size={15} className="ml-2 opacity-70" />
             </a>
           ) : (
             <button

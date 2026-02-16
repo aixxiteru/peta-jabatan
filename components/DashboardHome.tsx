@@ -5,6 +5,8 @@ import { Users, Briefcase, BookOpen, UserCheck, RefreshCw, Calendar, X, Filter, 
 import { StatCardProps, JobPosition } from '../types';
 import { jobPositions as mockPositions } from '../mockData';
 import { ShortageDetailModal } from './ShortageDetailModal';
+import StatusCard from './StatusCard';
+import './StatusCard.css';
 
 const StatCard: React.FC<StatCardProps & { ketersediaan?: number; kekurangan?: number; onKekuranganClick?: () => void }> = ({ title, count, color, ketersediaan, kekurangan, icon: Icon, onKekuranganClick }) => {
   const colorClasses = {
@@ -274,13 +276,14 @@ export const DashboardHome: React.FC = () => {
     <div className="p-6 space-y-6">
       <div className="bg-white p-4 border-l-4 border-blue-600 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex flex-col">
-            <h2 className="font-bold text-gray-800 tracking-tight uppercase text-sm">RINGKASAN EKSEKUTIF E-PETA JABATAN</h2>
-            {stats.lastSync && (
-                <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-600 mt-1">
-                    <RefreshCw size={12} className="animate-pulse" />
-                    SINKRONISASI TERAKHIR: {stats.lastSync}
-                </div>
-            )}
+          <h2 className="font-bold text-gray-800 tracking-tight uppercase text-sm">RINGKASAN EKSEKUTIF E-PETA JABATAN</h2>
+          <div className="font-semibold text-gray-500 uppercase text-xs leading-tight mb-1">BADAN STANDARDISASI DAN KEBIJAKAN INDUSTRI PUSAT</div>
+          {stats.lastSync && (
+            <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-600 mt-1">
+              <RefreshCw size={12} className="animate-pulse" />
+              SINKRONISASI TERAKHIR: {stats.lastSync}
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-3 w-full md:w-auto">
@@ -315,43 +318,58 @@ export const DashboardHome: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="TOTAL PNS AKTIF" count={stats.totalPNS} color="blue" icon={UserCheck} />
-        <StatCard 
-            title="STRUKTURAL" 
-            count={stats.struktural.ketersediaan} 
-            ketersediaan={stats.struktural.ketersediaan} 
-            kekurangan={stats.struktural.kekurangan} 
-            color="green" 
-            icon={Briefcase} 
-            onKekuranganClick={() => setViewingShortageFor('STRUKTURAL')}
+      <div className="dashboard-summary-grid">
+        <StatusCard
+          icon={<UserCheck size={28} color="#2563eb" />}
+          title="TOTAL PNS AKTIF"
+          mainValue={stats.totalPNS}
+          kebutuhan={
+            stats.struktural.kebutuhan +
+            stats.fungsional.kebutuhan +
+            stats.pelaksana.kebutuhan
+          }
+          shortage={
+            stats.struktural.kekurangan +
+            stats.fungsional.kekurangan +
+            stats.pelaksana.kekurangan
+          }
+          barColor="#2563eb"
         />
-        <StatCard 
-            title="FUNGSIONAL" 
-            count={stats.fungsional.ketersediaan} 
-            ketersediaan={stats.fungsional.ketersediaan} 
-            kekurangan={stats.fungsional.kekurangan} 
-            color="gray" 
-            icon={BookOpen} 
-            onKekuranganClick={() => setViewingShortageFor('FUNGSIONAL')}
+        <StatusCard
+          icon={<Briefcase size={28} color="#2563eb" />}
+          title="STRUKTURAL"
+          mainValue={stats.struktural.ketersediaan}
+          kebutuhan={stats.struktural.kebutuhan}
+          shortage={stats.struktural.kekurangan}
+          barColor="#2563eb"
+          onShortageClick={() => setViewingShortageFor('STRUKTURAL')}
         />
-        <StatCard 
-            title="PELAKSANA" 
-            count={stats.pelaksana.ketersediaan} 
-            ketersediaan={stats.pelaksana.ketersediaan} 
-            kekurangan={stats.pelaksana.kekurangan} 
-            color="orange" 
-            icon={Users} 
-            onKekuranganClick={() => setViewingShortageFor('PELAKSANA')}
+        <StatusCard
+          icon={<BookOpen size={28} color="#22c55e" />}
+          title="FUNGSIONAL"
+          mainValue={stats.fungsional.ketersediaan}
+          kebutuhan={stats.fungsional.kebutuhan}
+          shortage={stats.fungsional.kekurangan}
+          barColor="#22c55e"
+          onShortageClick={() => setViewingShortageFor('FUNGSIONAL')}
+        />
+        <StatusCard
+          icon={<Users size={28} color="#fbbf24" />}
+          title="PELAKSANA"
+          mainValue={stats.pelaksana.ketersediaan}
+          kebutuhan={stats.pelaksana.kebutuhan}
+          shortage={stats.pelaksana.kekurangan}
+          barColor="#fbbf24"
+          onShortageClick={() => setViewingShortageFor('PELAKSANA')}
         />
       </div>
 
-      <div className="bg-white rounded shadow-sm p-4 sm:p-8 border border-gray-100">
+      <div className="dashboard-chart-container">
         <div className="mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b pb-4">
             <div className="flex items-center gap-4">
                 <div>
-                    <h3 className="text-gray-700 font-bold uppercase tracking-widest text-sm">Grafik Analisis Kebutuhan vs Ketersediaan</h3>
-                    <p className="text-[10px] text-gray-400 mt-1 uppercase">Visualisasi Periode: <span className="text-blue-600 font-black">{selectedPeriod}</span></p>
+                    <h3 className="dashboard-chart-title">GRAFIK ANALISIS KEBUTUHAN VS KETERSEDIAAN</h3>
+                    <p className="dashboard-chart-subtitle">VISUALISASI PERIODE: <span className="dashboard-chart-period">{selectedPeriod}</span></p>
                 </div>
             </div>
             
