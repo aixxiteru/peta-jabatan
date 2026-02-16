@@ -209,28 +209,6 @@ export const JobTable: React.FC<JobTableProps> = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="space-y-2">
-          <div className={`px-4 py-2 rounded-md text-xs font-bold flex items-center justify-between shadow-sm border ${
-            dataSource === 'synced' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'
-          }`}>
-            <div className="flex items-center gap-2">
-                <Database size={14} />
-                <span>STATUS DATA: {dataSource === 'synced' ? 'TERHUBUNG KE GOOGLE SHEET' : 'MENGGUNAKAN DATA LOKAL'}</span>
-            </div>
-            {dataSource === 'synced' && <span className="text-[10px] animate-pulse">● LIVE</span>}
-          </div>
-
-          {syncStatus.type !== 'none' && (
-            <div className={`px-4 py-2 rounded-md text-xs font-bold flex items-center gap-2 animate-bounce border ${
-                syncStatus.type === 'success' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'
-            }`}>
-                {syncStatus.type === 'success' ? <CheckCircle2 size={14} /> : <AlertCircle size={14} />}
-                <span>{syncStatus.msg}</span>
-            </div>
-          )}
-
-        {/* Info SINKRONISASI TERAKHIR di atas kotak biru dihapus sesuai permintaan */}
-      </div>
 
       <div className="bg-blue-600 text-white p-4 rounded shadow-sm">
         <div className="flex items-center gap-2 mb-2 font-bold text-sm">
