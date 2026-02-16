@@ -31,8 +31,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen, 
         <img
           src="/logo-bskji-small2.png"
           alt="Logo BSKJI"
-          className="h-12 mt-2 mb-1 self-start"
-          style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
+          className="h-14 mt-3 self-start"
+          style={{ objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(29%) sepia(99%) saturate(749%) hue-rotate(182deg) brightness(1.1)' }}
         />
       </div>
       
