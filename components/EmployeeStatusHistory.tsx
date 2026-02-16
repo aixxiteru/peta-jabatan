@@ -117,7 +117,7 @@ export const EmployeeStatusHistory: React.FC = () => {
       <div className="bg-white p-4 border-l-4 border-blue-600 shadow-sm mb-6 flex justify-between items-center">
         <h2 className="font-semibold text-gray-800 flex items-center gap-2">
             <History size={20} className="text-blue-600" />
-            HISTORI STATUS PEGAWAI
+            LOG STATUS PEGAWAI
         </h2>
         <div className="flex gap-2">
             <div className="relative">

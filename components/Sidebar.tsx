@@ -1,5 +1,6 @@
 
 import React from 'react';
+
 import { LayoutDashboard, Map, History, ChevronLeft, Database } from 'lucide-react';
 import { ViewState } from '../types';
 
@@ -14,7 +15,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen, 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'peta', label: 'Peta Jabatan', icon: Map },
-    { id: 'histori', label: 'Histori Status Pegawai', icon: History },
+    { id: 'histori', label: 'Log Status Pegawai', icon: History },
     { id: 'database', label: 'Database', icon: Database },
   ];
 
@@ -25,6 +26,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen, 
         <button onClick={toggleSidebar} className="lg:hidden">
           <ChevronLeft size={24} />
         </button>
+      </div>
+      <div className="flex flex-col justify-start py-1 bg-slate-900 px-4">
+        <img
+          src="/logo-bskji-small.png"
+          alt="Logo BSKJI"
+          className="h-16 my-3 self-start"
+          style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
+        />
       </div>
       
       <div className="px-4 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">

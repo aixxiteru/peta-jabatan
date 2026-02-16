@@ -75,7 +75,7 @@ function App() {
     switch (currentView) {
       case 'dashboard': return ['Home', 'Dashboard'];
       case 'peta': return ['Dashboard', 'Peta Jabatan'];
-      case 'histori': return ['Dashboard', 'Histori Status Pegawai'];
+      case 'histori': return ['Dashboard', 'Log Status Pegawai'];
       case 'database': return ['Settings', 'Database Sync'];
       default: return ['Dashboard'];
     }
@@ -85,7 +85,7 @@ function App() {
      switch (currentView) {
       case 'dashboard': return 'Dashboard';
       case 'peta': return 'Peta Jabatan';
-      case 'histori': return 'Histori Status Pegawai';
+      case 'histori': return 'Log Status Pegawai';
       case 'database': return 'Konfigurasi Database';
       default: return 'Dashboard';
     }
