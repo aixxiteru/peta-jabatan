@@ -35,6 +35,7 @@ export const JobTable: React.FC<JobTableProps> = () => {
   };
 
   useEffect(() => {
+    // Hanya load data sinkronisasi, tidak update last_sync_time
     loadSyncedData();
     const handleSyncComplete = () => loadSyncedData();
     window.addEventListener('storage_sync_complete', handleSyncComplete);
@@ -142,7 +143,8 @@ export const JobTable: React.FC<JobTableProps> = () => {
       }
 
       const now = new Date().toLocaleString('id-ID');
-      localStorage.setItem('last_sync_time', now);
+      localStorage.setItem('last_manual_sync_time', now);
+      localStorage.setItem('last_sync_time', now); // keep for backward compatibility
       
       window.dispatchEvent(new Event('storage_sync_complete'));
       loadSyncedData();
@@ -226,6 +228,8 @@ export const JobTable: React.FC<JobTableProps> = () => {
                 <span>{syncStatus.msg}</span>
             </div>
           )}
+
+        {/* Info SINKRONISASI TERAKHIR di atas kotak biru dihapus sesuai permintaan */}
       </div>
 
       <div className="bg-blue-600 text-white p-4 rounded shadow-sm">
@@ -361,17 +365,29 @@ export const JobTable: React.FC<JobTableProps> = () => {
                 )}
             </div>
             
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-                <button 
-                    onClick={handleManualSync}
-                    disabled={isSyncing}
-                    className={`flex-1 sm:flex-none px-5 py-2 rounded text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 ${
-                        isSyncing ? 'bg-gray-300 text-gray-500' : 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                    }`}
-                >
-                    <RefreshCw size={16} className={isSyncing ? 'animate-spin' : ''} />
-                    {isSyncing ? 'Memproses...' : 'Sinkronkan Sekarang'}
-                </button>
+            <div className="flex flex-col items-start gap-1 w-full sm:w-auto">
+              <button 
+                onClick={handleManualSync}
+                disabled={isSyncing}
+                className={`flex-1 sm:flex-none px-5 py-2 rounded text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 ${
+                  isSyncing ? 'bg-gray-300 text-gray-500' : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                }`}
+              >
+                <RefreshCw size={16} className={isSyncing ? 'animate-spin' : ''} />
+                {isSyncing ? 'Memproses...' : 'Sinkronkan Sekarang'}
+              </button>
+              {/* Info SINKRONISASI TERAKHIR: tampilkan di bawah tombol Sinkronkan Sekarang */}
+              {(() => {
+                const lastSync = localStorage.getItem('last_manual_sync_time');
+                if (!lastSync) return null;
+                return (
+                  <div className="mt-1 text-[10px] text-gray-500 font-semibold flex items-center gap-1">
+                    <RefreshCw size={10} className="text-emerald-400" />
+                    <span>SINKRONISASI TERAKHIR:</span>
+                    <span className="text-emerald-700 font-bold">{lastSync}</span>
+                  </div>
+                );
+              })()}
             </div>
          </div>
       </div>

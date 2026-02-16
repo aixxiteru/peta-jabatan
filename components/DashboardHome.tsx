@@ -104,10 +104,43 @@ export const DashboardHome: React.FC = () => {
     return ['SEMUA UNIT', ...Array.from(unitsSet).sort()];
   }, [allPositions]);
 
+  // Otomatis sinkronisasi data Peta Jabatan setiap dashboard diakses
   useEffect(() => {
     if (updatePeriods.length > 0) {
       if (!selectedPeriod || !updatePeriods.includes(selectedPeriod)) {
         setSelectedPeriod(updatePeriods[0]);
+      }
+    }
+    if (typeof window !== 'undefined') {
+      const sheetUrl = localStorage.getItem('google_sheet_url');
+      const employeeGid = localStorage.getItem('google_employee_gid') || '0';
+      if (sheetUrl) {
+        (async () => {
+          try {
+            let csvJobUrl = sheetUrl;
+            if (sheetUrl.includes('/edit')) {
+              csvJobUrl = sheetUrl.replace(/\/edit.*$/, '/export?format=csv');
+              const gidMatch = sheetUrl.match(/gid=(\d+)/);
+              if (gidMatch) csvJobUrl += `&gid=${gidMatch[1]}`;
+            }
+            const jobResponse = await fetch(csvJobUrl);
+            if (jobResponse.ok) {
+              const csvJobData = await jobResponse.text();
+              localStorage.setItem('synced_job_data', csvJobData);
+            }
+            let csvEmpUrl = sheetUrl.replace(/\/edit.*$/, '/export?format=csv') + `&gid=${employeeGid}`;
+            const empResponse = await fetch(csvEmpUrl);
+            if (empResponse.ok) {
+              const csvEmpData = await empResponse.text();
+              localStorage.setItem('synced_employee_data', csvEmpData);
+            }
+            const now = new Date().toLocaleString('id-ID');
+            localStorage.setItem('last_sync_time', now);
+            window.dispatchEvent(new Event('storage_sync_complete'));
+          } catch (e) {
+            // ignore error, fallback to local data
+          }
+        })();
       }
     }
   }, [updatePeriods, selectedPeriod]);
@@ -278,12 +311,7 @@ export const DashboardHome: React.FC = () => {
         <div className="flex flex-col">
           <h2 className="font-bold text-gray-800 tracking-tight uppercase text-sm">RINGKASAN EKSEKUTIF E-PETA JABATAN</h2>
           <div className="font-semibold text-gray-500 uppercase text-xs leading-tight mb-1">BADAN STANDARDISASI DAN KEBIJAKAN INDUSTRI PUSAT</div>
-          {stats.lastSync && (
-            <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-600 mt-1">
-              <RefreshCw size={12} className="animate-pulse" />
-              SINKRONISASI TERAKHIR: {stats.lastSync}
-            </div>
-          )}
+
         </div>
 
         <div className="flex items-center gap-3 w-full md:w-auto">
