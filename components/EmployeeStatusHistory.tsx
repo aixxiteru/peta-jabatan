@@ -118,52 +118,47 @@ export const EmployeeStatusHistory: React.FC = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="bg-white p-4 border-l-4 border-blue-600 shadow-sm mb-6 flex justify-between items-center">
-        <h2 className="font-semibold text-gray-800 flex items-center gap-2">
+      <div className="bg-white p-4 border-l-4 border-blue-600 shadow-sm mb-6 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+        <h2 className="font-semibold text-gray-800 flex items-center gap-2 mb-2 sm:mb-0">
             <History size={20} className="text-blue-600" />
             LOG STATUS PEGAWAI
         </h2>
-        <div className="flex gap-2">
-                    <div className="relative">
-                      <select
-                        className={`border border-gray-300 rounded text-xs px-2 py-1 text-gray-900 ${statusFilter ? 'bg-blue-100' : 'bg-white'}`}
-                        value={statusFilter}
-                        onChange={e => setStatusFilter(e.target.value)}
-                      >
-                        <option value="">Semua Status</option>
-                        <option value="Promosi">Promosi</option>
-                        <option value="Mutasi">Mutasi</option>
-                        <option value="CTLN">CTLN</option>
-                        <option value="Tubel">Tubel</option>
-                        <option value="Tugas">Tugas</option>
-                      </select>
-                      {/* indikator dot dihapus, diganti dengan warna background */}
-                    </div>
-                    <div className="relative">
-                      <select
-                        className={`border border-gray-300 rounded text-xs px-2 py-1 text-gray-900 ${bFilter ? 'bg-blue-100' : 'bg-white'}`}
-                        value={bFilter}
-                        onChange={e => setBFilter(e.target.value)}
-                      >
-                        <option value="" style={{ color: '#a3a3a3' }}>Filter Perubahan</option>
-                        <option value="+1">+1</option>
-                        <option value="-1">-1</option>
-                      </select>
-                      {/* indikator dot dihapus, diganti dengan warna background */}
-                    </div>
-            <div className="relative">
-                <input 
-                    type="text" 
-                    placeholder="Cari Pegawai..." 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-8 pr-4 py-1.5 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-blue-500 outline-none w-48 md:w-64 bg-white text-gray-900 placeholder-gray-400 shadow-sm"
-                />
-                <Search size={14} className="absolute left-2.5 top-2 text-gray-400" />
-            </div>
-            <button className="bg-gray-100 hover:bg-gray-200 text-gray-600 p-1.5 rounded border border-gray-300 transition-colors">
-                <Filter size={16} />
-            </button>
+        <div className="flex flex-col gap-2 w-full sm:w-auto sm:flex-row sm:gap-2">
+          <div className="relative w-full sm:w-auto">
+            <select
+              className={`w-full sm:w-auto border border-gray-300 rounded text-xs px-2 py-1 text-gray-900 ${statusFilter ? 'bg-blue-100' : 'bg-white'}`}
+              value={statusFilter}
+              onChange={e => setStatusFilter(e.target.value)}
+            >
+              <option value="">Semua Status</option>
+              <option value="Promosi">Promosi</option>
+              <option value="Mutasi">Mutasi</option>
+              <option value="CTLN">CTLN</option>
+              <option value="Tubel">Tubel</option>
+              <option value="Tugas">Tugas</option>
+            </select>
+          </div>
+          <div className="relative w-full sm:w-auto">
+            <select
+              className={`w-full sm:w-auto border border-gray-300 rounded text-xs px-2 py-1 text-gray-900 ${bFilter ? 'bg-blue-100' : 'bg-white'}`}
+              value={bFilter}
+              onChange={e => setBFilter(e.target.value)}
+            >
+              <option value="" style={{ color: '#a3a3a3' }}>Filter Perubahan</option>
+              <option value="+1">+1</option>
+              <option value="-1">-1</option>
+            </select>
+          </div>
+          <div className="relative w-full sm:w-auto">
+            <input 
+              type="text" 
+              placeholder="Cari Pegawai..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full sm:w-48 md:w-64 pl-8 pr-4 py-1.5 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-blue-500 outline-none bg-white text-gray-900 placeholder-gray-400 shadow-sm"
+            />
+            <Search size={14} className="absolute left-2.5 top-2 text-gray-400" />
+          </div>
         </div>
       </div>
 

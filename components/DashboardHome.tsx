@@ -318,7 +318,7 @@ export const DashboardHome: React.FC = () => {
         </div>
       </div>
 
-      <div className="dashboard-summary-grid">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full dashboard-summary-grid">
         <StatusCard
           icon={<UserCheck size={28} color="#2563eb" />}
           title="TOTAL PNS AKTIF"

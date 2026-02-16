@@ -382,7 +382,7 @@ export const JobTable: React.FC<JobTableProps> = () => {
                 <thead>
                     <tr className="bg-blue-600 text-white text-[10px] uppercase tracking-wider">
                         <th className="p-4 font-bold border-r border-blue-500 w-10 text-center">No</th>
-                        <th className="p-4 font-bold border-r border-blue-500 w-40">Unit Kerja</th>
+                        <th className="p-4 font-bold border-r border-blue-500 w-20 min-w-[50px] max-w-[70px]">Unit Kerja</th>
                         <th className="p-4 font-bold border-r border-blue-500 w-32">Kategori</th>
                         <th className="p-4 font-bold border-r border-blue-500 min-w-[250px]">Nama Jabatan</th>
                         <th className="p-4 font-bold border-r border-blue-500 w-16 text-center">Grade</th>
@@ -397,34 +397,34 @@ export const JobTable: React.FC<JobTableProps> = () => {
                         const selisih = row.ketersediaan - row.kebutuhan;
                         return (
                           <tr key={row.id} className="even:bg-gray-50/50 hover:bg-sky-50 transition-colors border-b border-gray-100">
-                              <td className="p-4 text-center border-r border-gray-200 text-gray-400 font-medium">{index + 1}</td>
-                              <td className="p-4 border-r border-gray-200 font-semibold text-gray-600 truncate max-w-[160px]">
+                              <td className="p-4 text-center border-r border-gray-200 text-xs text-gray-700 font-medium">{index + 1}</td>
+                                <td className="p-4 border-r border-gray-200 text-xs font-semibold text-gray-700 truncate max-w-[100px]" style={{width: 100, minWidth: 50, maxWidth: 1000}}>
                                   <div className="flex items-center gap-1.5">
-                                      <Landmark size={12} className="text-gray-400 shrink-0" />
-                                      {formatUnitKerja(row.unitKerja || '')}
+                                    <Landmark size={12} className="text-gray-400 shrink-0" />
+                                    {formatUnitKerja(row.unitKerja || '')}
                                   </div>
-                              </td>
-                              <td className="p-4 border-r border-gray-200 text-gray-400 uppercase font-bold text-[9px]">{row.jenisJabatan}</td>
-                              <td className="p-4 border-r border-gray-200 font-bold">
+                                </td>
+                              <td className="p-4 border-r border-gray-200 text-xs text-gray-500 uppercase font-semibold">{row.jenisJabatan}</td>
+                              <td className="p-4 border-r border-gray-200 text-xs font-semibold">
                                   <div className="flex items-center justify-between cursor-pointer group" onClick={() => setViewingEmployeesFor(row.jabatan)}>
                                       <span className="group-hover:text-blue-600 uppercase">{row.jabatan}</span>
                                       <Search size={14} className="text-blue-300 opacity-0 group-hover:opacity-100" />
                                   </div>
                               </td>
-                              <td className="p-4 text-center border-r border-gray-200 font-mono text-gray-500">{row.kelasJabatan}</td>
-                              <td className="p-4 text-center border-r border-gray-200 font-black text-blue-700 bg-blue-50/10">
+                              <td className="p-4 text-center border-r border-gray-200 text-xs font-mono text-gray-500">{row.kelasJabatan}</td>
+                              <td className="p-4 text-center border-r border-gray-200 text-xs font-bold text-blue-700 bg-blue-50/10">
                                 {row.ketersediaan}
                               </td>
-                              <td className="p-4 text-center border-r border-gray-200 font-black text-amber-700 bg-amber-50/10">
+                              <td className="p-4 text-center border-r border-gray-200 text-xs font-bold text-amber-700 bg-amber-50/10">
                                 {row.kebutuhan}
                               </td>
-                              <td className={`p-4 text-center border-r border-gray-200 font-black ${
+                              <td className={`p-4 text-center border-r border-gray-200 text-xs font-bold ${
                                 selisih < 0 ? 'text-rose-600' : 
                                 selisih > 0 ? 'text-sky-600' : 'text-gray-300'
                               }`}>
                                 {selisih > 0 ? `+${selisih}` : selisih}
                               </td>
-                              <td className="p-4 text-center">
+                              <td className="p-4 text-center text-xs">
                                   <span className={`px-2 py-0.5 rounded text-[9px] font-black shadow-sm ${
                                       row.status === 'SESUAI' ? 'bg-white text-gray-400 border border-gray-200' :
                                       row.status === 'KURANG' ? 'bg-rose-500 text-white' : 'bg-amber-400 text-white'

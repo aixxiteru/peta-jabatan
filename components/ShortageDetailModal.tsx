@@ -71,32 +71,32 @@ export const ShortageDetailModal: React.FC<ShortageDetailModalProps> = ({ catego
                 <div className="overflow-x-auto scrollbar-hide">
                   <table className="w-full text-left border-collapse min-w-max">
                     <thead className="sticky top-0 bg-gray-50 z-10 shadow-sm">
-                      <tr className="text-[10px] uppercase font-bold text-gray-500 border-b tracking-wider">
-                        <th className="p-4 w-12 text-center">No</th>
-                        <th className="p-4 min-w-[300px]">Nama Jabatan</th>
-                        <th className="p-4 min-w-[100px] text-center">B</th>
-                        <th className="p-4 min-w-[100px] text-center">K</th>
-                        <th className="p-4 min-w-[100px] text-center text-rose-600">Selisih</th>
+                      <tr className="text-[11px] font-normal text-gray-500 border-b tracking-normal">
+                        <th className="p-3 w-12 text-center">No</th>
+                        <th className="p-3 min-w-[300px]">Nama Jabatan</th>
+                        <th className="p-3 min-w-[100px] text-center">B</th>
+                        <th className="p-3 min-w-[100px] text-center">K</th>
+                        <th className="p-3 min-w-[100px] text-center text-rose-600">Selisih</th>
                       </tr>
                     </thead>
-                    <tbody className="text-[11px] text-gray-700">
+                    <tbody className="text-[13px] text-gray-700">
                       {filteredShortages.map((pos, index) => {
                         const selisih = (pos.ketersediaan || 0) - (pos.kebutuhan || 0);
                         return (
                           <tr key={index} className="border-b hover:bg-rose-50/30 transition-colors">
-                            <td className="p-4 text-center text-gray-400 font-mono">{index + 1}</td>
-                            <td className="p-4">
+                            <td className="p-3 text-center text-gray-400 font-mono">{index + 1}</td>
+                            <td className="p-3">
                                 <div className="font-bold text-gray-800 uppercase leading-tight mb-1">{pos.jabatan || 'NAMA JABATAN TIDAK DITEMUKAN'}</div>
                                 {pos.unitKerja && (
-                                    <div className="flex items-center gap-1 text-[9px] text-gray-400 font-bold uppercase">
+                                    <div className="flex items-center gap-1 text-[11px] text-gray-500 font-bold">
                                         <Landmark size={10} />
                                         {pos.unitKerja}
                                     </div>
                                 )}
                             </td>
-                            <td className="p-4 text-center font-mono font-bold text-gray-600">{(pos.ketersediaan || 0)}</td>
-                            <td className="p-4 text-center font-mono font-bold text-gray-600">{(pos.kebutuhan || 0)}</td>
-                            <td className="p-4 text-center font-mono font-black text-rose-600 bg-rose-50/30">{selisih}</td>
+                            <td className="p-3 text-center font-mono font-bold text-gray-600">{(pos.ketersediaan || 0)}</td>
+                            <td className="p-3 text-center font-mono font-bold text-gray-600">{(pos.kebutuhan || 0)}</td>
+                            <td className="p-3 text-center font-mono font-black text-rose-600 bg-rose-50/30">{selisih}</td>
                           </tr>
                         );
                       })}

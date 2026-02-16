@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, User, Loader2, AlertCircle } from 'lucide-react';
+import { X, User, Loader2, AlertCircle, Landmark } from 'lucide-react';
 import { Employee } from '../types';
 
 interface EmployeeListModalProps {
@@ -121,23 +121,24 @@ export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, 
             <div className="border border-gray-200 rounded shadow-sm bg-white overflow-x-auto scrollbar-hide">
               <table className="min-w-[700px] w-full text-left border-collapse">
                 <thead className="sticky top-0 bg-gray-50 z-10 shadow-sm">
-                  <tr className="text-[10px] uppercase font-bold text-gray-500 border-b tracking-wider">
-                    <th className="p-4 w-12 text-center">No</th>
-                    <th className="p-4 w-64">Nama Pegawai</th>
-                    <th className="p-4 w-48">NIP</th>
-                    <th className="p-4 w-48">Pangkat / Golongan</th>
-                    <th className="p-4">Unit Kerja</th>
+                  <tr className="text-[11px] font-normal text-gray-500 border-b tracking-normal">
+                    <th className="p-3 w-12 text-center">No</th>
+                    <th className="p-3 w-64">Nama Pegawai</th>
+                    <th className="p-3 w-48">NIP</th>
+                    <th className="p-3 w-48">Pangkat / Golongan</th>
+                    <th className="p-3">Unit Kerja</th>
                   </tr>
                 </thead>
-                <tbody className="text-[11px] text-gray-700">
+                <tbody className="text-[13px] text-gray-700">
                   {syncedEmployees.map((emp, index) => (
                     <tr key={emp.id} className="border-b hover:bg-blue-50/30 transition-colors">
-                      <td className="p-4 text-center text-gray-400 font-mono">{index + 1}</td>
-                      <td className="p-4 font-bold text-blue-900 uppercase whitespace-normal">{emp.nama}</td>
-                      <td className="p-4 font-mono text-gray-500">{emp.nip}</td>
-                      <td className="p-4">{emp.pangkat}</td>
-                      <td className="p-4 font-medium text-gray-400 uppercase text-[9px] whitespace-normal">
-                          {emp.unitKerja}
+                      <td className="p-3 text-center text-gray-400 font-mono">{index + 1}</td>
+                      <td className="p-3 font-normal text-gray-700 whitespace-normal">{emp.nama}</td>
+                      <td className="p-3 font-normal text-gray-700">{emp.nip}</td>
+                      <td className="p-3 font-normal text-gray-700">{emp.pangkat}</td>
+                      <td className="p-3 font-bold text-gray-500 whitespace-normal flex items-center gap-1">
+                        <Landmark size={14} className="text-gray-400 mr-1" />
+                        {emp.unitKerja}
                       </td>
                     </tr>
                   ))}
