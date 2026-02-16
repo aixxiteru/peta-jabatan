@@ -20,8 +20,6 @@ type HistoryRow = {
 function parseCSV(text: string) {
   const cleaned = text.replace(/\r/g, '').replace(/^\uFEFF/, '');
   const lines = cleaned.split('\n').filter(l => l.trim() !== '');
-  if (lines.length === 0) return [];
-
   function parseLine(line: string) {
     const result: string[] = [];
     let cur = '';
@@ -45,7 +43,7 @@ function parseCSV(text: string) {
     result.push(cur);
     return result.map(s => s.trim());
   }
-
+  if (lines.length === 0) return { headers: [], rows: [] };
   const headers = parseLine(lines[0]).map(h => h.replace(/^"|"$/g, '').trim());
   const rows = lines.slice(1).map((line) => {
     const cols = parseLine(line).map(c => c.replace(/^"|"$/g, ''));
@@ -62,6 +60,7 @@ function headerToKey(header: string) {
   if (h.includes('nip')) return 'nip';
   if (h.includes('jabatan')) return 'jabatan';
   if (h.includes('unit')) return 'unitKerja';
+  if (h === 'b') return 'b';
   if (h.includes('status')) return 'status';
   if (h.includes('tanggal') || h.includes('date')) return 'tanggal';
   if (h.includes('keterangan')) return 'keterangan';
@@ -73,6 +72,8 @@ export const EmployeeStatusHistory: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [bFilter, setBFilter] = useState<string>('');
 
   useEffect(() => {
     let mounted = true;
@@ -84,7 +85,7 @@ export const EmployeeStatusHistory: React.FC = () => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const text = await res.text();
         const parsed = parseCSV(text);
-        if (parsed.length === 0) {
+        if (!parsed.rows || parsed.rows.length === 0) {
           if (mounted) setRows([]);
           return;
         }
@@ -108,9 +109,12 @@ export const EmployeeStatusHistory: React.FC = () => {
     return () => { mounted = false; };
   }, []);
 
-  const filteredRows = rows.filter(item =>
-    !searchQuery || item.nama?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredRows = rows.filter(item => {
+    const matchNama = !searchQuery || item.nama?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchStatus = !statusFilter || item.status === statusFilter;
+    const matchB = !bFilter || item.b === bFilter;
+    return matchNama && matchStatus && matchB;
+  });
 
   return (
     <div className="p-6 space-y-6">
@@ -120,6 +124,33 @@ export const EmployeeStatusHistory: React.FC = () => {
             LOG STATUS PEGAWAI
         </h2>
         <div className="flex gap-2">
+                    <div className="relative">
+                      <select
+                        className={`border border-gray-300 rounded text-xs px-2 py-1 text-gray-900 ${statusFilter ? 'bg-blue-100' : 'bg-white'}`}
+                        value={statusFilter}
+                        onChange={e => setStatusFilter(e.target.value)}
+                      >
+                        <option value="">Semua Status</option>
+                        <option value="Promosi">Promosi</option>
+                        <option value="Mutasi">Mutasi</option>
+                        <option value="CTLN">CTLN</option>
+                        <option value="Tubel">Tubel</option>
+                        <option value="Tugas">Tugas</option>
+                      </select>
+                      {/* indikator dot dihapus, diganti dengan warna background */}
+                    </div>
+                    <div className="relative">
+                      <select
+                        className={`border border-gray-300 rounded text-xs px-2 py-1 text-gray-900 ${bFilter ? 'bg-blue-100' : 'bg-white'}`}
+                        value={bFilter}
+                        onChange={e => setBFilter(e.target.value)}
+                      >
+                        <option value="" style={{ color: '#a3a3a3' }}>Filter Perubahan</option>
+                        <option value="+1">+1</option>
+                        <option value="-1">-1</option>
+                      </select>
+                      {/* indikator dot dihapus, diganti dengan warna background */}
+                    </div>
             <div className="relative">
                 <input 
                     type="text" 
@@ -142,20 +173,30 @@ export const EmployeeStatusHistory: React.FC = () => {
             <thead>
               <tr className="bg-blue-600 text-white text-xs uppercase tracking-wider">
                 <th className="p-4 font-semibold w-12 text-center">No</th>
-                <th className="p-4 font-semibold">Nama Pegawai</th>
+                <th className="p-4 font-semibold w-32 sticky left-0 z-10 bg-blue-600" style={{ width: 100, minWidth: 180, maxWidth: 200 }}>Nama Pegawai</th>
                 <th className="p-4 font-semibold">NIP</th>
-                <th className="p-4 font-semibold">Jabatan</th>
+                <th className="p-4 font-semibold w-80" style={{ width: 200, minWidth: 200, maxWidth: 300 }}>Jabatan</th>
                 <th className="p-4 font-semibold">Unit Kerja</th>
                 <th className="p-4 font-semibold text-center">Status</th>
+                <th className="p-4 font-semibold text-center">B</th>
                 <th className="p-4 font-semibold text-center">Tanggal</th>
-                <th className="p-4 font-semibold">Keterangan</th>
+                <th className="p-4 font-semibold" style={{ width: 300, minWidth: 300, maxWidth: 400 }}>Keterangan</th>
               </tr>
             </thead>
             <tbody className="text-xs text-gray-700">
               {filteredRows.map((item, index) => (
                 <tr key={item.id} className="even:bg-gray-50 hover:bg-blue-50 transition-colors border-b border-gray-100">
                   <td className="p-4 text-center border-r border-gray-200">{index + 1}</td>
-                  <td className="p-4 font-medium border-r border-gray-200 whitespace-nowrap">{item.nama || '-'}</td>
+                  <td
+                    className={
+                      `p-4 font-medium border-r border-gray-200 w-32 sticky left-0 ` +
+                      ` ${index % 2 === 1 ? 'bg-gray-50' : 'bg-white'} ` +
+                      `group-hover:bg-blue-50 transition-colors`
+                    }
+                    style={{ width: 120, minWidth: 120, maxWidth: 120 }}
+                  >
+                    {item.nama || '-'}
+                  </td>
                   <td className="p-4 border-r border-gray-200 whitespace-nowrap">{item.nip || '-'}</td>
                   <td className="p-4 border-r border-gray-200">{item.jabatan || '-'}</td>
                   <td className="p-4 border-r border-gray-200 font-semibold">{item.unitKerja || '-'}</td>
@@ -170,8 +211,17 @@ export const EmployeeStatusHistory: React.FC = () => {
                       {item.status || '-'}
                     </span>
                   </td>
+                  <td className="p-4 text-center border-r border-gray-200">
+                    {item.b === '-1' ? (
+                      <span className="text-red-600 font-bold">{item.b}</span>
+                    ) : item.b === '+1' ? (
+                      <span className="text-green-600 font-bold">{item.b}</span>
+                    ) : (
+                      <span className="font-bold">{item.b || '-'}</span>
+                    )}
+                  </td>
                   <td className="p-4 text-center border-r border-gray-200 whitespace-nowrap">{item.tanggal || '-'}</td>
-                  <td className="p-4">{item.keterangan || '-'}</td>
+                  <td className="p-4" style={{ width: 300, minWidth: 300, maxWidth: 400 }}>{item.keterangan || '-'}</td>
                 </tr>
               ))}
             </tbody>
