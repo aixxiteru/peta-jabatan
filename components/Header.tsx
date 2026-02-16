@@ -59,7 +59,7 @@ export const Header: React.FC<HeaderProps> = ({ title, breadcrumbs, toggleSideba
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-56 bg-white rounded shadow-lg z-50 border border-gray-200 animate-fade-in">
                 <a
-                  href="https://wa.me/6282324404850"
+                  href="https://wa.me/6282324404850?text=Halo%20Sabrina%20cantik"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-3 text-gray-700 text-sm hover:bg-green-50 hover:text-green-700 cursor-pointer transition-colors"

@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import { LayoutDashboard, Map, History, ChevronLeft, Database } from 'lucide-react';
+import { LayoutDashboard, Map, History, ChevronLeft, Database, Archive } from 'lucide-react';
 import { ViewState } from '../types';
 
 interface SidebarProps {
@@ -16,6 +16,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen, 
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'peta', label: 'Peta Jabatan', icon: Map },
     { id: 'histori', label: 'Log Status Pegawai', icon: History },
+    { id: 'arsip', label: 'Arsip', icon: Archive, isExternal: true, url: 'https://drive.google.com/drive/u/0/folders/1i3s6PYtt3UFD-uhwFqw6kXOBmmiKN27m' },
+  ];
+  const adminMenuItems = [
     { id: 'database', label: 'Database', icon: Database },
   ];
 
@@ -42,6 +45,37 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen, 
 
       <nav className="space-y-1">
         {menuItems.map((item) => (
+          item.isExternal ? (
+            <a
+              key={item.id}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`w-full flex items-center px-4 py-3 text-sm font-medium transition-colors border-l-4 border-transparent text-gray-400 hover:bg-white/5 hover:text-white`}
+              style={{ textAlign: 'left' }}
+            >
+              <item.icon size={18} className="mr-3" />
+              {item.label}
+            </a>
+          ) : (
+            <button
+              key={item.id}
+              onClick={() => setView(item.id as ViewState)}
+              className={`w-full flex items-center px-4 py-3 text-sm font-medium transition-colors border-l-4 ${
+                currentView === item.id
+                  ? 'bg-black/20 border-blue-500 text-white'
+                  : 'border-transparent text-gray-400 hover:bg-white/5 hover:text-white'
+              }`}
+            >
+              <item.icon size={18} className="mr-3" />
+              {item.label}
+            </button>
+          )
+        ))}
+        <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6 mb-1">
+          Admin Section
+        </div>
+        {adminMenuItems.map((item) => (
           <button
             key={item.id}
             onClick={() => setView(item.id as ViewState)}
