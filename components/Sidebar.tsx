@@ -29,9 +29,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen, 
       </div>
       <div className="flex flex-col justify-start py-1 bg-slate-900 px-4">
         <img
-          src="/logo-bskji-small.png"
+          src="/logo-bskji-small2.png"
           alt="Logo BSKJI"
-          className="h-16 my-3 self-start"
+          className="h-12 mt-2 mb-1 self-start"
           style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
         />
       </div>
