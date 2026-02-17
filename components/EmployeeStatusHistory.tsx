@@ -14,6 +14,7 @@ type HistoryRow = {
   b?: string;
   tanggal?: string;
   keterangan?: string;
+  sk?: string;
   [k: string]: any;
 };
 
@@ -64,6 +65,7 @@ function headerToKey(header: string) {
   if (h.includes('status')) return 'status';
   if (h.includes('tanggal') || h.includes('date')) return 'tanggal';
   if (h.includes('keterangan')) return 'keterangan';
+  if (h === 'sk' || h.includes('sk')) return 'sk';
   return header.replace(/\s+/g, '_');
 }
 
@@ -110,10 +112,13 @@ export const EmployeeStatusHistory: React.FC = () => {
   }, []);
 
   const filteredRows = rows.filter(item => {
-    const matchNama = !searchQuery || item.nama?.toLowerCase().includes(searchQuery.toLowerCase());
+    const keyword = searchQuery.toLowerCase();
+    const matchNama = !searchQuery || (item.nama?.toLowerCase().includes(keyword));
+    const matchSK = !searchQuery || (item.sk?.toLowerCase().includes(keyword));
     const matchStatus = !statusFilter || item.status === statusFilter;
     const matchB = !bFilter || item.b === bFilter;
-    return matchNama && matchStatus && matchB;
+    // Search bar: cocokkan jika keyword ada di nama atau SK
+    return (matchNama || matchSK) && matchStatus && matchB;
   });
 
   return (
@@ -152,7 +157,7 @@ export const EmployeeStatusHistory: React.FC = () => {
           <div className="relative w-full sm:w-auto">
             <input 
               type="text" 
-              placeholder="Cari Pegawai..." 
+              placeholder="Cari Pegawai atau SK..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full sm:w-48 md:w-64 pl-8 pr-4 py-1.5 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-blue-500 outline-none bg-white text-gray-900 placeholder-gray-400 shadow-sm"
@@ -175,7 +180,8 @@ export const EmployeeStatusHistory: React.FC = () => {
                 <th className="p-4 font-semibold text-center">Status</th>
                 <th className="p-4 font-semibold text-center">B</th>
                 <th className="p-4 font-semibold text-center">Tanggal</th>
-                <th className="p-4 font-semibold" style={{ width: 300, minWidth: 300, maxWidth: 400 }}>Keterangan</th>
+                <th className="p-4 font-semibold text-center" style={{ width: 180, minWidth: 150, maxWidth: 250 }}>SK</th>
+                <th className="p-4 font-semibold" style={{ width: 300, minWidth: 180, maxWidth: 400 }}>Keterangan</th>
               </tr>
             </thead>
             <tbody className="text-xs text-gray-700">
@@ -216,7 +222,8 @@ export const EmployeeStatusHistory: React.FC = () => {
                     )}
                   </td>
                   <td className="p-4 text-center border-r border-gray-200 whitespace-nowrap">{item.tanggal || '-'}</td>
-                  <td className="p-4" style={{ width: 300, minWidth: 300, maxWidth: 400 }}>{item.keterangan || '-'}</td>
+                  <td className="p-4 text-left border-r border-gray-200" style={{ width: 180, minWidth: 150, maxWidth: 250 }}>{item.sk || '-'}</td>
+                  <td className="p-4" style={{ width: 300, minWidth: 180, maxWidth: 400 }}>{item.keterangan || '-'}</td>
                 </tr>
               ))}
             </tbody>

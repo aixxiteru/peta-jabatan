@@ -65,7 +65,7 @@ export const Header: React.FC<HeaderProps> = ({ title, breadcrumbs, toggleSideba
                   className="flex items-center gap-2 px-4 py-3 text-gray-700 text-sm hover:bg-green-50 hover:text-green-700 cursor-pointer transition-colors"
                 >
                   <span className="text-green-500"><WhatsAppIcon style={{ fontSize: 20 }} /></span>
-                  <span className="font-medium">Hubungi Developer</span>
+                  <span className="font-medium">Hubungi Kepegawaian</span>
                 </a>
               </div>
             )}
