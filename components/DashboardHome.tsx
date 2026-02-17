@@ -454,9 +454,9 @@ export const DashboardHome: React.FC = () => {
               <Legend verticalAlign="top" align="right" iconType="circle" wrapperStyle={{ paddingBottom: '20px', fontSize: '11px', fontWeight: 'bold' }}/>
               
               {/* URUTAN BARIS INI MENENTUKAN URUTAN DI GRAFIK & LEGENDA (KIRI KE KANAN) */}
-              <Bar name="Kebutuhan (K)" dataKey="Kebutuhan" fill="#334155" radius={[6, 6, 0, 0]} barSize={45} />
-              <Bar name="Ketersediaan (B)" dataKey="Ketersediaan" fill="#0ea5e9" radius={[6, 6, 0, 0]} barSize={45} />
-              <Bar name="Kekurangan" dataKey="Kekurangan" fill="#f43f5e" radius={[6, 6, 0, 0]} barSize={45} />
+              <Bar name="Kebutuhan (K)" dataKey="Kebutuhan" fill="#334155" radius={[6, 6, 0, 0]} barSize={100} />
+              <Bar name="Ketersediaan (B)" dataKey="Ketersediaan" fill="#0ea5e9" radius={[6, 6, 0, 0]} barSize={100} />
+              <Bar name="Kekurangan" dataKey="Kekurangan" fill="#f43f5e" radius={[6, 6, 0, 0]} barSize={100} />
             </BarChart>
           </ResponsiveContainer>
         </div>
