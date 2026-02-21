@@ -440,7 +440,11 @@ export const JobTable: React.FC<JobTableProps> = () => {
         </div>
       </div>
       
-      <EmployeeListModal jobTitle={viewingEmployeesFor} onClose={() => setViewingEmployeesFor(null)} />
+      <EmployeeListModal 
+        jobTitle={viewingEmployeesFor} 
+        unitKerjaFilter={selectedUnitFilter !== 'Semua Unit Kerja' ? selectedUnitFilter : undefined}
+        onClose={() => setViewingEmployeesFor(null)} 
+      />
     </div>
   );
 };

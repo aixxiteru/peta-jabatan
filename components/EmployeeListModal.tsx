@@ -6,10 +6,11 @@ import { Employee } from '../types';
 
 interface EmployeeListModalProps {
   jobTitle: string | null;
+  unitKerjaFilter?: string;
   onClose: () => void;
 }
 
-export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, onClose }) => {
+export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, unitKerjaFilter, onClose }) => {
   const [syncedEmployees, setSyncedEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,10 +66,12 @@ export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, 
           });
 
           const cleanTarget = jobTitle.trim().toLowerCase();
-          const filtered = mapped.filter(emp => 
+          let filtered = mapped.filter(emp => 
             emp.jabatan.trim().toLowerCase() === cleanTarget
           );
-          
+          if (unitKerjaFilter) {
+            filtered = filtered.filter(emp => (emp.unitKerja || '').trim() === unitKerjaFilter);
+          }
           setSyncedEmployees(filtered);
         } else {
           setSyncedEmployees([]);
