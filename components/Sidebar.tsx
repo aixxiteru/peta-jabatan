@@ -15,10 +15,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen, 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'peta', label: 'Peta Jabatan', icon: Map },
-    { id: 'histori', label: 'Log Status Pegawai', icon: History },
     { id: 'arsip', label: 'Arsip', icon: Archive, isExternal: true, url: 'https://drive.google.com/drive/u/0/folders/1i3s6PYtt3UFD-uhwFqw6kXOBmmiKN27m' },
   ];
   const adminMenuItems = [
+    { id: 'histori', label: 'Log Status Pegawai', icon: History },
     { id: 'database', label: 'Database', icon: Database },
   ];
 

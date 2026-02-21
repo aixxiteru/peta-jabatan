@@ -64,6 +64,7 @@ function headerToKey(header: string) {
   if (h === 'b') return 'b';
   if (h.includes('status')) return 'status';
   if (h.includes('tanggal') || h.includes('date')) return 'tanggal';
+  if (h.includes('tmt')) return 'tmt';
   if (h.includes('keterangan')) return 'keterangan';
   if (h === 'sk' || h.includes('sk')) return 'sk';
   return header.replace(/\s+/g, '_');
@@ -180,6 +181,7 @@ export const EmployeeStatusHistory: React.FC = () => {
                 <th className="p-4 font-semibold text-center">Status</th>
                 <th className="p-4 font-semibold text-center">B</th>
                 <th className="p-4 font-semibold text-center">Tanggal</th>
+                <th className="p-4 font-semibold text-center">TMT</th>
                 <th className="p-4 font-semibold text-center" style={{ width: 180, minWidth: 150, maxWidth: 250 }}>SK</th>
                 <th className="p-4 font-semibold" style={{ width: 300, minWidth: 180, maxWidth: 400 }}>Keterangan</th>
               </tr>
@@ -222,6 +224,7 @@ export const EmployeeStatusHistory: React.FC = () => {
                     )}
                   </td>
                   <td className="p-4 text-center border-r border-gray-200 whitespace-nowrap">{item.tanggal || '-'}</td>
+                  <td className="p-4 text-center border-r border-gray-200 whitespace-nowrap">{item.tmt || '-'}</td>
                   <td className="p-4 text-left border-r border-gray-200" style={{ width: 180, minWidth: 150, maxWidth: 250 }}>{item.sk || '-'}</td>
                   <td className="p-4" style={{ width: 300, minWidth: 180, maxWidth: 400 }}>{item.keterangan || '-'}</td>
                 </tr>
