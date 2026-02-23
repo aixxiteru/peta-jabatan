@@ -309,7 +309,7 @@ export const DashboardHome: React.FC = () => {
     <div className="p-6 space-y-6">
       <div className="bg-white p-4 border-l-4 border-blue-600 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex flex-col">
-          <h2 className="font-bold text-gray-800 tracking-tight uppercase text-sm">RINGKASAN EKSEKUTIF E-PETA JABATAN</h2>
+          <h2 className="font-bold text-gray-800 tracking-tight uppercase text-sm">RINGKASAN EKSEKUTIF E-PETA JABATAN BSKJI</h2>
           <div className="font-semibold text-gray-500 uppercase text-xs leading-tight mb-1">BADAN STANDARDISASI DAN KEBIJAKAN JASA INDUSTRI PUSAT</div>
 
         </div>
