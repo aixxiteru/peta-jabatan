@@ -1,17 +1,22 @@
 
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, User, Loader2, AlertCircle, Landmark } from 'lucide-react';
+import { X, User, Loader2, AlertCircle, Landmark, Calendar } from 'lucide-react';
 import { Employee } from '../types';
+
+interface EmployeeWithPeriode extends Employee {
+  periodeUpdate?: string;
+}
 
 interface EmployeeListModalProps {
   jobTitle: string | null;
   unitKerjaFilter?: string;
+  periodFilter?: string;
   onClose: () => void;
 }
 
-export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, unitKerjaFilter, onClose }) => {
-  const [syncedEmployees, setSyncedEmployees] = useState<Employee[]>([]);
+export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, unitKerjaFilter, periodFilter, onClose }) => {
+  const [syncedEmployees, setSyncedEmployees] = useState<EmployeeWithPeriode[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,12 +50,13 @@ export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, 
           const idxJabatan = headers.findIndex(h => h.includes('jabatan') || h === 'nama_jabatan' || h === 'posisi');
           const idxUnit = headers.findIndex(h => h.includes('unit') || h.includes('satker') || h.includes('kerja'));
           const idxPangkat = headers.findIndex(h => h.includes('pangkat') || h.includes('gol') || h.includes('ruang'));
+          const idxPeriode = headers.findIndex(h => h.includes('periode') || h.includes('update'));
 
           if (idxJabatan === -1) {
             throw new Error("Kolom 'Jabatan' tidak ditemukan.");
           }
 
-          const mapped: Employee[] = lines.slice(1).map((line, idx) => {
+          const mapped: EmployeeWithPeriode[] = lines.slice(1).map((line, idx) => {
             const regex = new RegExp(`${delimiter}(?=(?:(?:[^"]*"){2})*[^"]*$)`);
             const cols = line.split(regex).map(c => c.trim().replace(/^"|"$/g, ''));
             
@@ -61,7 +67,8 @@ export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, 
               jabatan: cols[idxJabatan] || '',
               unitKerja: cols[idxUnit] || '-',
               pangkat: cols[idxPangkat] || '-',
-              golongan: ''
+              golongan: '',
+              periodeUpdate: idxPeriode !== -1 ? (cols[idxPeriode] || '') : ''
             };
           });
 
@@ -71,6 +78,14 @@ export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, 
           );
           if (unitKerjaFilter) {
             filtered = filtered.filter(emp => (emp.unitKerja || '').trim() === unitKerjaFilter);
+          }
+          // Filter berdasarkan periode update
+          if (periodFilter) {
+            filtered = filtered.filter(emp => {
+              const empPeriode = (emp.periodeUpdate || '').trim().toLowerCase();
+              const targetPeriode = periodFilter.trim().toLowerCase();
+              return empPeriode === targetPeriode;
+            });
           }
           setSyncedEmployees(filtered);
         } else {
@@ -85,7 +100,7 @@ export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, 
     };
 
     loadData();
-  }, [jobTitle]);
+  }, [jobTitle, unitKerjaFilter, periodFilter]);
 
   if (!jobTitle) return null;
 
@@ -101,6 +116,12 @@ export const EmployeeListModal: React.FC<EmployeeListModalProps> = ({ jobTitle, 
             <div>
               <h3 className="font-bold text-sm uppercase tracking-wider">Daftar Pegawai</h3>
               <p className="text-[11px] text-blue-400 mt-0.5 font-bold uppercase tracking-tight leading-tight">{jobTitle}</p>
+              {periodFilter && (
+                <p className="text-[10px] text-gray-400 mt-0.5 flex items-center gap-1">
+                  <Calendar size={10} />
+                  Periode: {periodFilter}
+                </p>
+              )}
             </div>
           </div>
           <button onClick={onClose} className="hover:bg-white/10 p-1.5 rounded-full transition-colors">
